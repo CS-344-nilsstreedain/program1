@@ -17,7 +17,7 @@ struct movie {
 	struct movie *next;
 };
 
-struct movie *createMovie(char *currLine) {
+struct movie *createMovieFromLine(char *currLine) {
 	struct movie *currMovie = malloc(sizeof(struct movie));
 	
 	char *saveptr;
@@ -48,7 +48,7 @@ struct movie *parseFile(const char *filePath) {
 	
 	getline(&currLine, &len, movieFile);
 	while (getline(&currLine, &len, movieFile) != -1) {
-		struct movie *newNode = createMovie(currLine);
+		struct movie *newNode = createMovieFromLine(currLine);
 		
 		if (head == NULL) {
 			head = newNode;
@@ -86,13 +86,6 @@ int movieInLang(struct movie *movie, char *lang) {
 	return 0;
 }
 
-void printMovieList(struct movie *list) {
-	while (list != NULL) {
-		printf("%s, %d, %s, %f\n", list->title, list->year, list->langs, list->rating);
-		list = list->next;
-	}
-}
-
 void listMoviesByYear(struct movie *list) {
 	printf("Enter the year for which you want to see movies: ");
 	int year, found = 0;
@@ -106,6 +99,25 @@ void listMoviesByYear(struct movie *list) {
 	}
 	if (!found)
 		printf("No data about movies released in the year %d\n", year);
+	printf("\n");
+}
+
+int checkRatings(struct movie *movie, struct movie *list) {
+	while (list != NULL) {
+		if ((movie->year == list->year) && ((movie->rating < list->rating) || ((movie->rating == list->rating) && (strcmp(movie->title, list->title) < 0))))
+			return 0;
+		list = list->next;
+	}
+	return 1;
+}
+
+void listTopMovieEachYear(struct movie *list) {
+	struct movie *listCopy = list;
+	while (list != NULL) {
+		if (checkRatings(list, listCopy))
+			printf("%d, %.1f, %s\n", list->year, list->rating, list->title);
+		list = list->next;
+	}
 	printf("\n");
 }
 
@@ -135,7 +147,7 @@ int main(int argc, const char * argv[]) {
 	
 	struct movie *list = parseFile(argv[1]);
 	printf("Processed file %s and parsed data for %d movies\n", argv[1], getLength(list));
-	
+
 	while (1) {
 		printf("1. Show movies released in the specified year\n2. Show highest rated movie for each year\n3. Show the title and year of release of all movies in a specific language\n4. Exit from the program\n\nEnter a choice from 1 to 4: ");
 
@@ -146,7 +158,7 @@ int main(int argc, const char * argv[]) {
 				listMoviesByYear(list);
 				break;
 			case 2:
-				printf("2\n");
+				listTopMovieEachYear(list);
 				break;
 			case 3:
 				listMoviesByLang(list);

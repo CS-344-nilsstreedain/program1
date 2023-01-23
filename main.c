@@ -1,21 +1,24 @@
 /**
  * @file main.c
- * @author Author Name
+ * @author Nils Streedain
  * @date January 23, 2023
- * @brief This file contains a collection of functions that parse and manipulate movie data read from a file, including creating a linked list of movie structs, finding the length of the list, searching for movies by year, and listing the highest rated movie from each year.
+ * @brief This file contains a collection of functions that parse and manipulate movie
+ * data read from a file, including creating a linked list of movie structs, finding the length
+ * of the list, searching for movies by year, and listing the highest rated movie from each
+ * year.
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 /**
  * @struct movie
- * @brief Representation of a movie, including its title, year, languages, rating and a pointer to the next movie in a linked list.
- * @var title 		- Title of the movie
+ * @brief Representation of a movie, including its title, year, languages, rating and a
+ * pointer to the next movie in a linked list.
+ * @var title		- Title of the movie
  * @var year 		- Year of the movie release
- * @var langs 		- Languages in which the movie is available
- * @var rating 		- Rating of the movie
+ * @var langs 	- Languages in which the movie is available
+ * @var rating 	- Rating of the movie
  * @var next 		- Pointer to the next movie in a linked list
  */
 struct movie {
@@ -29,10 +32,11 @@ struct movie {
 
 /**
  * @brief Create a movie struct from a string representing a line from a file
- * @param currLine - A string representing a line from a file, formatted as "title,year,languages,rating\n"
- * @return Pointer to a newly allocated movie struct, with its fields populated according to the input string.
+ * @param currLine - A string representing a line from a file, formatted as:
+ * "title,year,languages,rating\n"
+ * @return Pointer to a newly allocated movie struct, with its fields populated according
+ * to the input string.
  */
-
 struct movie *createMovieFromLine(char *currLine) {
 	struct movie *currMovie = malloc(sizeof(struct movie));
 	
@@ -56,7 +60,8 @@ struct movie *createMovieFromLine(char *currLine) {
 
 /**
  * @brief Parse a file containing movie data and create a linked list of movie structs
- * @param filePath - Path to the file containing movie data, formatted as "title,year,languages,rating\n" for each movie.
+ * @param filePath - Path to the file containing movie data, formatted as:
+ * "title,year,languages,rating\n" for each movie.
  * @return Pointer to the head of the linked list of movie structs
  */
 struct movie *parseFile(const char *filePath) {
@@ -190,9 +195,11 @@ void listMoviesByLang(struct movie *list) {
 }
 
 /**
- * @brief The main function, it reads a file containing movie data, create a linked list of movie structs and call other functions to parse and manipulate the data
+ * @brief The main function, it reads a file containing movie data, create a linked list of
+ * movie structs and call other functions to parse and manipulate the data
  * @param argc - Number of command line arguments
- * @param argv - Array of command line arguments, argv[1] should be the filepath to the movie data file
+ * @param argv - Array of command line arguments, argv[1] should be the filepath to
+ * the movie data file
  * @return 0 if the program runs successfully, 1 otherwise
  */
 int main(int argc, const char * argv[]) {

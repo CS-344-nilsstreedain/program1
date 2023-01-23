@@ -175,7 +175,6 @@ void listTopMovieEachYear(struct movie *list) {
 /**
  * @brief List the title of the movies available in a specific language
  * @param list - Pointer to the head of the linked list of movie structs
- * @param lang - The language to check for
  */
 void listMoviesByLang(struct movie *list) {
 	printf("Enter the language for which you want to see movies: ");

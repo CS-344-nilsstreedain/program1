@@ -25,7 +25,7 @@ struct movie {
 	char *title;
 	int year;
 	char *langs;
-	float rating;
+	double rating;
 	struct movie *next;
 };
 
@@ -52,7 +52,7 @@ struct movie *createMovieFromLine(char *currLine) {
 	currMovie->langs = calloc(strlen(token) + 1, sizeof(char));
 	strcpy(currMovie->langs, token);
 	
-	currMovie->rating = strtof(strtok_r(NULL, "\n", &saveptr), NULL);
+	currMovie->rating = strtod(strtok_r(NULL, "\n", &saveptr), NULL);
 	
 	currMovie->next = NULL;
 	return currMovie;

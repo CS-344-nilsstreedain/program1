@@ -11,9 +11,9 @@
 
 struct movie {
 	char *title;
-	char *year;
-	char *lang;
-	char *rating;
+	int year;
+	char *langs;
+	float rating;
 	struct movie *next;
 };
 
@@ -26,17 +26,13 @@ struct movie *createMovie(char *currLine) {
 	currMovie->title = calloc(strlen(token) + 1, sizeof(char));
 	strcpy(currMovie->title, token);
 	
-	token = strtok_r(NULL, ",", &saveptr);
-	currMovie->year = calloc(strlen(token) + 1, sizeof(char));
-	strcpy(currMovie->year, token);
+	currMovie->year = atoi(strtok_r(NULL, ",", &saveptr));
 	
 	token = strtok_r(NULL, ",", &saveptr);
-	currMovie->lang = calloc(strlen(token) + 1, sizeof(char));
-	strcpy(currMovie->lang, token);
+	currMovie->langs = calloc(strlen(token) + 1, sizeof(char));
+	strcpy(currMovie->langs, token);
 	
-	token = strtok_r(NULL, "\n", &saveptr);
-	currMovie->rating = calloc(strlen(token) + 1, sizeof(char));
-	strcpy(currMovie->rating, token);
+	currMovie->rating = strtof(strtok_r(NULL, "\n", &saveptr), NULL);
 	
 	currMovie->next = NULL;
 	return currMovie;
@@ -76,19 +72,33 @@ int getLength(struct movie *list) {
 	return length;
 }
 
+int movieInLang(struct movie *movie, char *lang) {
+	char langs[100];
+	strcpy(langs, movie->langs);
+	
+	char *saveptr;
+	char *token = strtok_r(langs, "[;]", &saveptr);
+	while (token != NULL) {
+		if (!strcasecmp(token, lang))
+			return 1;
+		token = strtok_r(NULL, "[;]", &saveptr);
+	}
+	return 0;
+}
+
 void printMovieList(struct movie *list) {
 	while (list != NULL) {
-		printf("%s, %s, %s, %s\n", list->title, list->year, list->lang, list->rating);
+		printf("%s, %d, %s, %f\n", list->title, list->year, list->langs, list->rating);
 		list = list->next;
 	}
 }
 
-void listMovieListByYear(struct movie *list) {
+void listMoviesByYear(struct movie *list) {
 	printf("Enter the year for which you want to see movies: ");
 	int year, found = 0;
 	scanf("%d", &year);
 	while (list != NULL) {
-		if (atoi(list->year) == year) {
+		if (list->year == year) {
 			printf("%s\n", list->title);
 			found = 1;
 		}
@@ -99,19 +109,20 @@ void listMovieListByYear(struct movie *list) {
 	printf("\n");
 }
 
-void listMovieListByLang(struct movie *list) {
+void listMoviesByLang(struct movie *list) {
 	printf("Enter the language for which you want to see movies: ");
-	int year, found = 0;
-	scanf("%d", &year);
+	char lang[20];
+	scanf("%s", lang);
+	int found = 0;
 	while (list != NULL) {
-		if (atoi(list->year) == year) {
-			printf("%s\n", list->title);
+		if (movieInLang(list, lang)) {
+			printf("%i %s\n", list->year, list->title);
 			found = 1;
 		}
 		list = list->next;
 	}
 	if (!found)
-		printf("No data about movies released in the year %d\n", year);
+		printf("No data about movies released in %s\n", lang);
 	printf("\n");
 }
 
@@ -127,19 +138,18 @@ int main(int argc, const char * argv[]) {
 	
 	while (1) {
 		printf("1. Show movies released in the specified year\n2. Show highest rated movie for each year\n3. Show the title and year of release of all movies in a specific language\n4. Exit from the program\n\nEnter a choice from 1 to 4: ");
-		
+
 		int userInput;
 		scanf("%d", &userInput);
 		switch(userInput) {
 			case 1:
-				listMovieListByYear(list);
+				listMoviesByYear(list);
 				break;
 			case 2:
 				printf("2\n");
 				break;
 			case 3:
-//				printf("Enter the language for which you want to see movies: ");
-				
+				listMoviesByLang(list);
 				break;
 			case 4:
 				return EXIT_SUCCESS;

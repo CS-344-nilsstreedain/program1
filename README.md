@@ -63,8 +63,9 @@ This file has the following columns:
 ## Program Functionality
 ### Process the input file
 When your program starts it must read all data from the file and process it. After processing the file, the program must print the following message to stdout
-
-`Processed file XYZ and parsed data for M movies`
+```
+Processed file XYZ and parsed data for M movies
+```
 
 where XYZ is the name of the file that has been process and M is the number of movies whose data has been processed (this will be 1 less than than the number of lines in the file because the first line has the column headers).
 
